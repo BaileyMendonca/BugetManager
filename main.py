@@ -1,16 +1,16 @@
 import PySimpleGUI as sg
 
 layout = [
-    [sg.Text("Hello from me")], 
-    [sg.Button("Ok")]
+    [sg.Text("Welcome Bailey to your budget tracker")], 
+    [sg.Button("Exit")]
 ]
 
-window = sg.Window("Demo", layout)
+window = sg.Window("Budget Tracker", layout)
 
 while True: 
     event, values = window.read()
 
-    if event == "Ok" or event == sg.WIN_CLOSED: 
+    if event == "Exit" or event == sg.WIN_CLOSED: 
         break
 
 window.close()
