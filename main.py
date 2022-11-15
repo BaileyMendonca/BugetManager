@@ -8,8 +8,8 @@ accounts_balance = {
     'Salary' : 263.40,
     'Stocks' : 0.00,
     'Crypto' : 0.00,
-    'Spender' : 0.00,
-    'Everyday' : 0.00,
+    'Spender Account' : 0.00,
+    'Everyday Saver' : 0.00,
     'Car Savings' : 0.00,
     'House Savings' : 0.00,
     'Travel Savings' : 0.00,
@@ -21,37 +21,43 @@ accounts_balance = {
     'Health' : 0.00,
 }
 
-savingsAccounts = ['Stocks', 'Crypto', 'Spender', 'Everyday', 'Car Savings', 'House Savings', 'Travel Savings']
+savingsAccounts = ['Stocks', 'Crypto', 'Spender Account', 'Everyday Saver', 'Car Savings', 'House Savings', 'Travel Savings']
 expensesAccounts = ['Travel', 'Entertainment', 'Food', 'Gaming', 'Misc', 'Health']
 incomeAccounts = ['Side Hustle', 'Twitch', 'Salary']
 
-def savings_Window(tabName, amount):  
-    Deposit_Layout = [
-        [sg.Input(key= "-IN-")], 
-        [sg.Button("Confirm")], 
-        [sg.Button("Go Back")],
+def income_Window(tabName, amount):  
+    roundedNumber = round(accounts_balance[tabName], 3)
+    outGoing_layout = [ 
+        [sg.Text("Please enter money outgoing"), sg.InputText()],
+        [sg.OptionMenu(values=savingsAccounts, key='Account ingoing')],
     ]
-    
-    mainIncomelayout = [ 
-        [sg.Text(tabName + " savings window")], 
-        [sg.Text("You currently have: $" + str(amount))],
-        [Deposit_Layout],
-        [sg.Button("Deposit")],
+    button_layout = [ 
         [sg.Button("Transfer")],
         [sg.Button("Close")],
     ]
-    window = sg.Window("Income Window", mainIncomelayout, modal=True )
+    layout = [ 
+        [sg.Text(tabName + " Income window")],
+        [sg.Text("You currently have made: $" + str(roundedNumber) + " through this revune")],
+        [outGoing_layout],
+        [button_layout], 
+
+    ] 
+    window = sg.Window("Income Window", layout, modal=True )
     while True: 
         event, values = window.read()
         if event == sg.WINDOW_CLOSED: 
             break
         if event == "Close": 
             break
+        if event == "Transfer":
+            accounts_balance[tabName] = accounts_balance[tabName] + float(values[0])
+            accounts_balance[values['Account ingoing']] = accounts_balance[values['Account ingoing']] + float(values[0])
+            window.close()
     window.close()
         
 
-def income_Window(tabName, amount):
-    roundedNumber = round(accounts_balance[tabName], 2)
+def savings_Window(tabName, amount):
+    roundedNumber = round(accounts_balance[tabName], 3)
     outGoing_layout = [ 
         [sg.Text("Please enter money outgoing"), sg.InputText()],
         [sg.OptionMenu(values=expensesAccounts, key='Account ingoing')],
@@ -77,14 +83,14 @@ def income_Window(tabName, amount):
         if event == "Transfer":
             accounts_balance[tabName] = accounts_balance[tabName] - float(values[0])
             accounts_balance[values['Account ingoing']] = accounts_balance[values['Account ingoing']] + float(values[0])
-            window.refresh()
+            window.close()
     window.close()
 
 def expense_Window(tabName, amount): 
     roundedNumber = round(accounts_balance[tabName], 2)
     layout = [ 
         [sg.Text(tabName + " Income window")],
-        [sg.Text("You currently have spent: $" + str(roundedNumber) + "this month")], 
+        [sg.Text("You currently have spent: $" + str(roundedNumber) + " this month")], 
         [sg.Button("Close")],
     ]
 
@@ -149,26 +155,24 @@ while True:
 
     if event == "Side Hustle": 
         income_Window("Side Hustle", accounts_balance["Side Hustle"])
-
     if event == "Salary": 
         income_Window(event, accounts_balance[event])
-
     if event == "Twitch": 
         income_Window(event, accounts_balance[event])
     if event == "Stock": 
-        income_Window(event, accounts_balance[event])
+        savings_Window(event, accounts_balance[event])
     if event == "Crypto": 
-        income_Window(event, accounts_balance[event])
+        savings_Window(event, accounts_balance[event])
     if event == "Spender Account": 
-        income_Window(event, accounts_balance[event])
+        savings_Window(event, accounts_balance[event])
     if event == "Everyday Saver": 
-        income_Window(event, accounts_balance[event])
+        savings_Window(event, accounts_balance[event])
     if event == "Car Savings": 
-        income_Window(event, accounts_balance[event])
+        savings_Window(event, accounts_balance[event])
     if event == "House Savings": 
-        income_Window(event, accounts_balance[event])
+        savings_Window(event, accounts_balance[event])
     if event == "Travel Savings": 
-        income_Window(event, accounts_balance[event])
+        savings_Window(event, accounts_balance[event])
     if event == "Travel": 
         expense_Window(event, accounts_balance[event])
     if event == "Entertainment": 
