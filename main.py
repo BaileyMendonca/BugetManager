@@ -166,23 +166,30 @@ def settings_Window(obj):
     window.close()
 
 Income_Layout = [
-    [sg.Button(f"{account}") for account in incomeAccounts]]
+    [sg.Text("Income Accounts")],
+    [sg.Button(f"{account}") for account in incomeAccounts], 
+    [sg.HSeparator()],
+    ]
     
 Savings_Layout = [
-    [sg.Button(f"{account}") for account in savingsAccounts]]
+    [sg.Text("Savings Accounts")],
+    [sg.Button(f"{account}") for account in savingsAccounts],
+    [sg.HSeparator()],
+    ]
 
 Expense_Layout = [
-    [sg.Button(f"{account}") for account in expensesAccounts]]
+    [sg.Text("Expense Accounts")],
+    [sg.Button(f"{account}") for account in expensesAccounts],
+    [sg.HSeparator()],
+    ]
 
 layout = [
     [
     [sg.Text('Welcome to Simple Budget', justification='center')],
+    [sg.HSeparator()],
     [Income_Layout],
-    sg.HSeparator(),
     [Savings_Layout],
-    sg.HSeparator(),
     [Expense_Layout],
-    sg.HSeparator(),
     sg.Button("Exit"), 
     sg.Button("Settings"), 
     ]
