@@ -128,16 +128,33 @@ def expense_Window(tabName, amount):
             break
     window.close()
 
-def settings_Window(): 
+def settings_Window(obj): 
     layout = [ 
+        [sg.Text("Add new value (requires app restart)"), sg.InputText()],
+        [sg.OptionMenu(values=["Expenses Account", "Savings Account", "Income Account"], key="Options")],
+        [sg.Button("Add Account")],
         [sg.Text("Resetting the values will require a application restart")],
-        [sg.Button("Reset Values")],
+        [sg.Button("Reset Money")],
     ]
     window = sg.Window("Settings Window", layout, modal=True,grab_anywhere=True)
     while True: 
         event, values = window.read()
-        if event == "Reset Values": 
-            obj = Accounts()
+        if event == "Add Account": 
+            if values['Options'] == "Expenses Account": 
+                obj.expenses.append(values[0])
+                obj.accounts[values[0]] = 0.00
+            if values['Options'] == "Savings Account": 
+                obj.savings.append(values[0])
+                obj.accounts[values[0]] = 0.00
+            if values['Options'] == "Income Account": 
+                obj.income.append(values[0])
+                obj.accounts[values[0]] = 0.00
+            save_object(obj)
+            window.close()
+            window_main.close()
+        if event == "Reset Money": 
+            for account in obj.accounts: 
+                obj.accounts[account] = 0.00
             save_object(obj)
             window.close()
             window_main.close()
@@ -179,7 +196,7 @@ while True:
     if event == "Exit" or event == sg.WIN_CLOSED: 
         break
     if event == "Settings": 
-        settings_Window()
+        settings_Window(obj)
     for iAccount in incomeAccounts: 
         if event == iAccount: 
             income_Window(iAccount, accounts_balance[iAccount])
